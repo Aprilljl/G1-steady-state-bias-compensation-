@@ -3,8 +3,8 @@
   "upstream_commit": "276801e46c5d433564f24658bac64f254b7d2d4b",
   "files": {
     "legged_gym/scripts/eval_batch.py": {"private_sha256": "20d5d8a1f0dc6836ff670f3b0e80d89b67800b99ad6deff86bdf396a9737e75c", "upstream_sha256": null},
-    "legged_gym/envs/base/legged_robot.py": {"private_sha256": "c49028df7e2e741c558cf1b15836ba427991f5f93c6e1e82378481615961e3aa", "upstream_sha256": "d5f94228e1861dcdd7c8f41f8da82b5ace21f5c22ef8db7bbf8e047a225e6a63"},
-    "legged_gym/envs/g1/g1_config.py": {"private_sha256": "f44597f735ce86d2420aea5c905fb3da6d3b894b56d45aeb47e91c625bdba390", "upstream_sha256": "09d795e001399c30c4ae7ad0c1ecd91276ed38f561376fd063437b95a4e9f30b"},
+    "legged_gym/envs/base/legged_robot.py": {"private_sha256": "d73ff273231482e79c85c480396d5aa270e591eb92cdd712c94573cfa937168a", "upstream_sha256": "d5f94228e1861dcdd7c8f41f8da82b5ace21f5c22ef8db7bbf8e047a225e6a63"},
+    "legged_gym/envs/g1/g1_config.py": {"private_sha256": "869d071b724ce6d57f199375b5bdecc66f52b2206debb82a2c104a8232d85622", "upstream_sha256": "09d795e001399c30c4ae7ad0c1ecd91276ed38f561376fd063437b95a4e9f30b"},
     "thesis_eval/metrics.py": {"private_sha256": "02040e8a1f658e40d1c0626a1abfce897a0446b699e82fbbddddd70571f3f252", "upstream_sha256": null},
     "thesis_eval/policy_arch.py": {"private_sha256": "d891e61af3cbf5e10bd579c23187da7d539a767af211a6fc36d21151e7f992f0", "upstream_sha256": null},
     "thesis_eval/scenarios.py": {"private_sha256": "7dc0366e3616291ec1aa869f38f8110266b20fc860f4985740515d8fecc624dc", "upstream_sha256": null},
