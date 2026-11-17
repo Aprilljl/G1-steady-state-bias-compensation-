@@ -1,0 +1,42 @@
+# E4: second checkpoint G = Mar11_17-23-39_ (list.txt: plane, 2.0 m/s speed-limit run), 小论文补充实验设计.md section 9.
+# Run with --policy Mar11_17-23-39_ (sp_control.py) and its own design file (sp_design_G.json, built from G's S1/S2 data).
+# Same protocol as short_paper_control.yaml; SP-B3 reduced to the payloads 0 / 10 kg.
+
+defaults:
+  policy: Mar11_17-23-39_
+  activation: elu
+  seed: 0
+  episodes: 50
+  episode_length_s: 40.0
+  warmup_s: 2.0
+  settle_s: 20.0
+  timeseries_episodes: 1
+  condition: {}
+
+controllers:
+  none: {type: none}
+  outer: {type: outer, gamma: design, u_min: 0.0, u_max: design, t_on_s: 2.0}
+
+experiments:
+
+  SP-B2_step_id:
+    episodes: 10
+    episode_length_s: 30.0
+    settle_s: 10.0
+    timeseries_episodes: 10
+    condition: {controller: none}
+    grid:
+      payload_kg: [0, 8, 15]
+    conditions:
+      - {command_vx: 0.5, command_step: [15.0, 0.75]}
+      - {command_vx: 1.0, command_step: [15.0, 1.25]}
+      - {command_vx: 1.0, command_step: [15.0, 0.75]}
+      - {command_vx: 1.5, command_step: [15.0, 1.75]}
+      - {command_vx: 1.5, command_step: [15.0, 1.25]}
+
+  SP-B3_compensation:
+    episodes: 50
+    grid:
+      payload_kg: [0, 10]
+      command_vx: [0.5, 1.0, 1.5, 2.0]
+      controller: [none, outer]

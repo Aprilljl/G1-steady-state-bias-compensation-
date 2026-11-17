@@ -1,0 +1,63 @@
+# Short-paper supplementary experiments, Isaac Gym part that needs no new code (stage S1 of 小论文补充实验设计.md).
+# Schema: thesis_eval/scenarios.py, run by run_eval.py -> legged_gym/scripts/eval_batch.py unchanged.
+#   SP-A2   failure hazard vs command speed on the plane, 60 s (cross-engine hazard ratio, same grid as SP-A1)
+#   SP-B1g  static command-to-speed map g(u; m) on the plane, 30 s (cross-engine check of SP-B1)
+# Run:  python thesis_eval/run_eval.py --config <this file> --registry eval_results/registry.csv \
+#           --out_root eval_results/short_paper_isaacgym --only SP-A2 SP-B1g
+# No rough-terrain duration test: rough_d05 is 10 x 8 m long, so at >= 1.5 m/s most robots would leave the rough
+# region within 40 s; the duration dependence of the hazard is tested on the plane (SP-A1 120 s, SP-A2 60 s).
+
+defaults:
+  episodes: 100
+  seed: 0
+  episode_length_s: 20.0
+  warmup_s: 2.0
+  add_noise: false
+  max_envs: 4096
+  timeseries_episodes: 1
+  checkpoint: final
+  condition:
+    payload_kg: 0.0
+    friction: 1.0
+    command_vx: 1.0
+    command_vy: 0.0
+    command_yaw: 0.0
+    push_dir_deg: null
+    push_mag_mps: 0.0
+    push_time_s: null
+  recorder_params: {}
+
+terrains:
+  plane:
+    mesh_type: plane
+    ground_friction: 1.0
+
+experiments:
+
+  SP0_smoke_isaac:
+    enabled: true
+    policies: [Mar11_13-47-46_]
+    terrains: [plane]
+    episodes: 4
+    episode_length_s: 30.0
+    grid:
+      command_vx: [1.0, 2.4]
+
+  SP-A2_speed_hazard_plane:
+    enabled: true
+    policies: [Mar11_13-47-46_]
+    terrains: [plane]
+    episodes: 100
+    episode_length_s: 60.0
+    grid:
+      command_vx: [1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0]
+
+  SP-B1g_static_map_isaac:
+    enabled: true
+    policies: [Mar11_13-47-46_]
+    terrains: [plane]
+    episodes: 20
+    episode_length_s: 30.0
+    grid:
+      payload_kg: [0, 3, 5, 8, 10, 15]
+      command_vx: [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25]

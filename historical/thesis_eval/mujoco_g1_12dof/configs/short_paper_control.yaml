@@ -1,0 +1,96 @@
+# Short-paper control experiments (sp_control.py, 小论文补充实验设计.md). Plane, flat checkpoint F, MuJoCo only.
+# Grid axes: any condition key with a list of values (cartesian product, condition_id = "key=value|...");
+# an optional explicit `conditions` list is crossed with the grid product.
+# Condition keys: payload_kg, friction, command_vx (reference c at t = 0), command_step [t_s, c_new],
+#   payload_step [t_s, payload_new_kg], controller (preset name below), gamma_mult, est_bias, est_noise_std.
+# Controller presets: type none | outer; gamma / u_max / u_min may be "design" = value from sp_design.json (--design).
+# Stage S2 (no design needed): SP0_smoke_control, SP-B2.   Stage S3 (needs --design): SP-B3 ... SP-B7.
+
+defaults:
+  policy: Mar11_13-47-46_
+  activation: elu
+  seed: 0
+  episodes: 50
+  episode_length_s: 40.0
+  warmup_s: 2.0
+  settle_s: 20.0              # settled window [20, 40] s; the design's settling budget is settle_s - t_on_s = 18 s
+  timeseries_episodes: 1
+  condition: {}
+
+controllers:
+  none: {type: none}
+  outer: {type: outer, gamma: design, u_min: 0.0, u_max: design, t_on_s: 2.0}
+  outer_nocap: {type: outer, gamma: design, u_min: 0.0, u_max: 3.5, t_on_s: 2.0}
+  # smoke-test preset with a fixed gain, usable before the design exists
+  outer_fixed: {type: outer, gamma: 0.3, u_min: 0.0, u_max: 2.2, t_on_s: 2.0}
+
+experiments:
+
+  SP0_smoke_control:
+    episodes: 2
+    episode_length_s: 12.0
+    settle_s: 6.0
+    timeseries_episodes: 2
+    condition: {command_vx: 1.0, payload_kg: 10.0}
+    grid:
+      controller: [none, outer_fixed]
+
+  # Stage S2. Reference step of +-0.25 m/s at t = 15 s, open loop; per-step traces for every episode (FOPDT fit)
+  SP-B2_step_id:
+    episodes: 10
+    episode_length_s: 30.0
+    settle_s: 10.0
+    timeseries_episodes: 10
+    condition: {controller: none}
+    grid:
+      payload_kg: [0, 8, 15]
+    conditions:
+      - {command_vx: 0.5, command_step: [15.0, 0.75]}
+      - {command_vx: 1.0, command_step: [15.0, 1.25]}
+      - {command_vx: 1.0, command_step: [15.0, 0.75]}
+      - {command_vx: 1.5, command_step: [15.0, 1.75]}
+      - {command_vx: 1.5, command_step: [15.0, 1.25]}
+
+  # Stage S3. Main comparison, paired episodes: 6 payloads x 4 references x 2 controllers
+  SP-B3_compensation:
+    episodes: 50
+    grid:
+      payload_kg: [0, 3, 5, 8, 10, 15]
+      command_vx: [0.5, 1.0, 1.5, 2.0]
+      controller: [none, outer]
+
+  # Gain sweep around the predicted stability bound (multiples of the design gain)
+  SP-B4_gain_sweep:
+    episodes: 10
+    timeseries_episodes: 10
+    condition: {payload_kg: 10.0, command_vx: 1.0, controller: outer}
+    grid:
+      gamma_mult: [0.25, 0.5, 1.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0]
+
+  # Payload step 0 -> 10 / 15 kg at t = 20 s (after the zero-payload loop has settled), recovery over 30 s
+  SP-B5_payload_step:
+    episodes: 20
+    episode_length_s: 50.0
+    settle_s: 40.0
+    timeseries_episodes: 5
+    condition: {payload_kg: 0.0, command_vx: 1.0}
+    grid:
+      payload_step: [[20.0, 10.0], [20.0, 15.0]]
+      controller: [none, outer]
+
+  # Velocity-estimate bias and white noise (per policy step) at 10 kg
+  SP-B6_estimator:
+    episodes: 20
+    condition: {payload_kg: 10.0, command_vx: 1.0, controller: outer}
+    grid:
+      est_bias: [-0.1, -0.05, 0.0, 0.05, 0.1]
+      est_noise_std: [0.0, 0.1, 0.3]
+
+  # Command cap: hazard-derived u_max versus no cap, long episodes
+  SP-B7_cap:
+    episodes: 50
+    episode_length_s: 60.0
+    grid:
+      payload_kg: [10, 15]
+      command_vx: [1.5, 1.75, 2.0]
+      controller: [outer, outer_nocap]

@@ -1,0 +1,10 @@
+{
+  "source_sha256": "53f814da184c0a9dbbd64221ce519a60cdde3fd6675f0319eb3187c01a39bc82",
+  "english_montage_sha256": "754b925d79cf8e7bec7fc11672b69444437ff6eedf19a1033d46bc489bc2e247",
+  "source_dimensions": [1771, 1062],
+  "source_context": "User-supplied thesis Chapter 4 montage, identified in source provenance as Unitree G1 29-DoF whole-body joint-prior policy in MuJoCo on flat ground.",
+  "edit_scope": "English labels only; eight frame rectangles retained.",
+  "source_and_third_party_rights": "The author confirmed the right to publicly redistribute the English image and its depicted materials.",
+  "evidence_role": "Qualitative illustration only, not F/G/R numerical evidence and not among 5450 audited episodes.",
+  "reproduction_limit": "Original label script depends on platform font and Pillow rasterization; current environment does not reproduce reference label pixels."
+}

@@ -1,0 +1,5 @@
+{
+  "F": {"run": "Mar11_13-47-46_", "filename": "model_10000.pt", "sha256": "975dbcec99b81d9d467e4d6e4404b29a301a2b7a5f9b7744f5b9d4955b3b22a0", "architecture": "ActorCritic; actor MLP 512-256-128; ELU", "evidence": "private eval_results/registry.csv row; CEP manuscript Table 1; historical F config", "status": "archived record; checkpoint bytes and architecture not independently verified"},
+  "G": {"run": "Mar11_17-23-39_", "filename": "model_10000.pt", "sha256": "66c7cfb05388da0ba247a00e8bbff48ef89f70c05d16d8bb6b0da68e078f46b4", "architecture": "ActorCritic; actor MLP 512-256-128; ELU", "evidence": "private eval_results/registry.csv row; CEP manuscript Table 1; historical G config", "status": "archived record; checkpoint bytes and architecture not independently verified"},
+  "R": {"run": "Mar11_13-45-41_", "filename": "model_10000.pt", "sha256": "dd1bf3d60f26c9331b7ff93044e15926e5ab44d4a8d1ca38d667121598e0d383", "architecture": "ActorCritic; actor MLP 512-256-128; ELU", "evidence": "private eval_results/registry.csv row; CEP manuscript Table 1", "status": "archived record; checkpoint bytes and architecture not independently verified"}
+}

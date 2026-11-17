@@ -1,0 +1,35 @@
+# Round 3 formal checkpoint G; seed is an evaluation seed, not a training seed.
+defaults:
+  policy: Mar11_17-23-39_
+  activation: elu
+  seed: 17
+  episodes: 20
+  episode_length_s: 40.0
+  warmup_s: 2.0
+  settle_s: 20.0
+  timeseries_episodes: 20
+  condition: {friction: 1.0}
+controllers:
+  none: {type: none, u_min: design, u_max: design}
+  feedforward:
+    type: feedforward
+    gamma: design
+    u_min: design
+    u_max: design
+    t_on_s: 2.0
+    static_csv: eval_results/short_paper_G/short_paper_mujoco/SP-B1_static_map/episodes_all.csv
+    expected_payloads: [0, 3, 5, 8, 10, 15]
+    expected_commands: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25]
+  integral: {type: integral, gamma: design, u_min: design, u_max: design, t_on_s: 2.0}
+  outer: {type: outer, gamma: design, u_min: design, u_max: design, t_on_s: 2.0}
+experiments:
+  SP3-M1_static:
+    condition: {payload_kg: 0, command_vx: 1.5}
+    grid:
+      controller: [none, feedforward, integral, outer]
+  SP3-M2_payload_step:
+    episode_length_s: 50.0
+    settle_s: 40.0
+    condition: {payload_kg: 0, command_vx: 1.0, payload_step: [20, 10]}
+    grid:
+      controller: [none, feedforward, integral, outer]

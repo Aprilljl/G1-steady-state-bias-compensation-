@@ -1,0 +1,59 @@
+{
+  "release_scope": "selected historical Isaac Gym evaluation chain with an import-safe offline boundary",
+  "private_source": {
+    "repository": "private_source",
+    "commit": "8df0dfc8669620b5ee058dbe117fe92b653aafc6",
+    "license_files": ["LICENSE", "legged_gym/LICENSE"],
+    "license_status": "BSD 3-Clause notices retained in source repository; copied release does not add a blanket license for private adaptations or checkpoints"
+  },
+  "upstream_reference": {
+    "repository": "unitree_rl_gym",
+    "commit": "276801e46c5d433564f24658bac64f254b7d2d4b",
+    "license": "BSD 3-Clause (root); legged_gym/LICENSE credits ETH Zurich/NVIDIA",
+    "role": "architecture and baseline comparison only; not copied wholesale"
+  },
+  "source_hashes_sha256_raw_bytes": {
+    "private_source/legged_gym/scripts/eval_batch.py": "20d5d8a1f0dc6836ff670f3b0e80d89b67800b99ad6deff86bdf396a9737e75c",
+    "private_source/thesis_eval/metrics.py": "02040e8a1f658e40d1c0626a1abfce897a0446b699e82fbbddddd70571f3f252",
+    "private_source/thesis_eval/policy_arch.py": "d891e61af3cbf5e10bd579c23187da7d539a767af211a6fc36d21151e7f992f0",
+    "private_source/thesis_eval/registry.py": "37ecb53e60c09a1a811bd31dd871b05ce9d5ae27f50cfff32823de97ff66642d",
+    "private_source/thesis_eval/scenarios.py": "7dc0366e3616291ec1aa869f38f8110266b20fc860f4985740515d8fecc624dc",
+    "private_source/legged_gym/envs/base/legged_robot.py": "c49028df7e2e741c558cf1b15836ba427991f5f93c6e1e82378481615961e3aa",
+    "unitree_rl_gym/legged_gym/envs/base/legged_robot.py": "d5f94228e1861dcdd7c8f41f8da82b5ace21f5c22ef8db7bbf8e047a225e6a63",
+    "private_source/legged_gym/envs/g1/g1_config.py": "f44597f735ce86d2420aea5c905fb3da6d3b894b56d45aeb47e91c625bdba390",
+    "unitree_rl_gym/legged_gym/envs/g1/g1_config.py": "09d795e001399c30c4ae7ad0c1ecd91276ed38f561376fd063437b95a4e9f30b"
+  },
+  "selected_sources": [
+    {"source": "thesis_eval/configs/short_paper_isaacgym.yaml", "destination": "configs/short_paper_isaacgym.yaml", "adaptation": "format-preserving copy; registered design unchanged"},
+    {"source": "thesis_eval/scenarios.py", "destination": "scenarios.py", "adaptation": "offline wrapper imports existing historical expander; no simulator or checkpoint load"},
+    {"source": "thesis_eval/policy_arch.py", "destination": "policy_arch.py", "adaptation": "explicit paper MLP gate only; no deserialization"},
+    {"source": "legged_gym/scripts/eval_batch.py", "destination": "overlay/legged_gym/scripts/eval_batch.py", "adaptation": "exact private source; top-level eval_batch.py is a separate import-safe stub"},
+    {"source": "legged_gym/envs/base/legged_robot.py", "destination": "overlay/legged_gym/envs/base/legged_robot.py", "adaptation": "exact private environment file; runtime compatibility not verified"},
+    {"source": "legged_gym/envs/g1/g1_config.py", "destination": "overlay/legged_gym/envs/g1/g1_config.py", "adaptation": "exact private G1 config; runtime compatibility not verified"},
+    {"source": "thesis_eval/{metrics,policy_arch,registry,scenarios,run_eval}.py", "destination": "overlay/thesis_eval/", "adaptation": "exact private evaluation modules; file hashes in overlay_manifest.json"}
+  ],
+  "private_patch_closure": [
+    "private_source/legged_gym/scripts/eval_batch.py",
+    "private_source/thesis_eval/metrics.py",
+    "private_source/thesis_eval/policy_arch.py",
+    "private_source/thesis_eval/registry.py",
+    "private_source/thesis_eval/scenarios.py",
+    "private_source/legged_gym/envs/base/legged_robot.py (private callbacks and terrain helpers)",
+    "private_source/legged_gym/envs/g1/g1_config.py and task registration",
+    "private_source/resources/robots/g1_description/g1_12dof.urdf and meshes",
+    "Isaac Gym Preview 3/4, compatible torch/rsl_rl/PyYAML/numpy environment",
+    "authorized F/G/R checkpoints and exact registry rows"
+  ],
+  "upstream_differences": {
+    "legged_robot": "private SHA differs from fixed upstream SHA; private evaluator relies on callback/terrain helpers absent or different upstream",
+    "g1_config": "private SHA differs; private historical 12-DoF MLP record must not be replaced by upstream recurrent/LSTM defaults",
+    "measured_diff": "git diff --no-index reported 215 insertions and 33 deletions for legged_robot.py"
+  },
+  "unverified": [
+    "Isaac Gym is absent on the Windows host",
+    "checkpoint bytes and architecture are not independently deserialized here",
+    "asset and checkpoint distribution rights are unresolved",
+    "the selected private overlay has not been runtime-verified against the public upstream checkout; remaining dependency closure is not proven",
+    "no formal Isaac Gym output was generated"
+  ]
+}

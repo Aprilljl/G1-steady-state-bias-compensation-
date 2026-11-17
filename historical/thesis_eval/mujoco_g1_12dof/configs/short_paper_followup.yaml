@@ -1,0 +1,65 @@
+# Short-paper follow-up experiments E1 and E2 (sp_control.py, 小论文补充实验设计.md section 9).
+# Same schema as short_paper_control.yaml. Needs --design (E1: the frozen v1 design; E2: sp_design_v2.json).
+#   SP-E1  extended gain sweep with a mid-episode reference step (prediction PB-2, instability onset rule in section 9.2)
+#   SP-E2  rerun of every 15 kg compensated condition under the corrected cap rule v2, plus 60 s no-compensation controls
+
+defaults:
+  policy: Mar11_13-47-46_
+  activation: elu
+  seed: 0
+  episodes: 50
+  episode_length_s: 40.0
+  warmup_s: 2.0
+  settle_s: 20.0
+  timeseries_episodes: 0
+  condition: {}
+
+controllers:
+  none: {type: none}
+  outer: {type: outer, gamma: design, u_min: 0.0, u_max: design, t_on_s: 2.0}
+  # E1 isolates the loop gain: the cap is far above every command reached at 10 kg, so saturation cannot mask instability
+  outer_wide: {type: outer, gamma: design, u_min: 0.0, u_max: 3.5, t_on_s: 2.0}
+
+experiments:
+
+  # E1. 10 kg, reference 1.0 -> 1.1 m/s at t = 25 s; analysis window = the 20 cycles after the step (25 to 41 s)
+  SP-E1_gain_onset:
+    episodes: 10
+    episode_length_s: 45.0
+    settle_s: 41.0
+    timeseries_episodes: 10
+    condition: {payload_kg: 10.0, command_vx: 1.0, command_step: [25.0, 1.1], controller: outer_wide}
+    grid:
+      gamma_mult: [1.0, 8.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0, 30.0]
+
+  # E2a. SP-B3 15 kg rows with the v2 cap (outer only; the none rows of SP-B3 are unchanged and reused)
+  SP-E2a_b3_15kg:
+    episodes: 50
+    condition: {payload_kg: 15.0, controller: outer}
+    grid:
+      command_vx: [0.5, 1.0, 1.5, 2.0]
+
+  # E2b. SP-B5 15 kg payload step with the v2 cap (outer only)
+  SP-E2b_b5_15kg:
+    episodes: 20
+    episode_length_s: 50.0
+    settle_s: 40.0
+    timeseries_episodes: 5
+    condition: {payload_kg: 0.0, command_vx: 1.0, payload_step: [20.0, 15.0], controller: outer}
+
+  # E2c. SP-B7 capped arm for 15 kg with the v2 cap (60 s)
+  SP-E2c_b7_15kg:
+    episodes: 50
+    episode_length_s: 60.0
+    condition: {payload_kg: 15.0, controller: outer}
+    grid:
+      command_vx: [1.5, 1.75, 2.0]
+
+  # E2d. 60 s no-compensation control for SP-B7 (same protocol and window [20, 60] s; paired by episode)
+  SP-E2d_b7_none:
+    episodes: 50
+    episode_length_s: 60.0
+    condition: {controller: none}
+    grid:
+      payload_kg: [10, 15]
+      command_vx: [1.5, 1.75, 2.0]

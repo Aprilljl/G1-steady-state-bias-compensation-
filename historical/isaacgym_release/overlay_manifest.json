@@ -1,0 +1,19 @@
+{
+  "private_commit": "8df0dfc8669620b5ee058dbe117fe92b653aafc6",
+  "upstream_commit": "276801e46c5d433564f24658bac64f254b7d2d4b",
+  "files": {
+    "legged_gym/scripts/eval_batch.py": {"private_sha256": "20d5d8a1f0dc6836ff670f3b0e80d89b67800b99ad6deff86bdf396a9737e75c", "upstream_sha256": null},
+    "legged_gym/envs/base/legged_robot.py": {"private_sha256": "c49028df7e2e741c558cf1b15836ba427991f5f93c6e1e82378481615961e3aa", "upstream_sha256": "d5f94228e1861dcdd7c8f41f8da82b5ace21f5c22ef8db7bbf8e047a225e6a63"},
+    "legged_gym/envs/g1/g1_config.py": {"private_sha256": "f44597f735ce86d2420aea5c905fb3da6d3b894b56d45aeb47e91c625bdba390", "upstream_sha256": "09d795e001399c30c4ae7ad0c1ecd91276ed38f561376fd063437b95a4e9f30b"},
+    "thesis_eval/metrics.py": {"private_sha256": "02040e8a1f658e40d1c0626a1abfce897a0446b699e82fbbddddd70571f3f252", "upstream_sha256": null},
+    "thesis_eval/policy_arch.py": {"private_sha256": "d891e61af3cbf5e10bd579c23187da7d539a767af211a6fc36d21151e7f992f0", "upstream_sha256": null},
+    "thesis_eval/scenarios.py": {"private_sha256": "7dc0366e3616291ec1aa869f38f8110266b20fc860f4985740515d8fecc624dc", "upstream_sha256": null},
+    "thesis_eval/registry.py": {"private_sha256": "37ecb53e60c09a1a811bd31dd871b05ce9d5ae27f50cfff32823de97ff66642d", "upstream_sha256": null},
+    "thesis_eval/run_eval.py": {"private_sha256": "aa86d4c6e48dfc416c8a81e06e5f8fcc4f458103ec591d3f797db77f4b842cec", "upstream_sha256": null},
+    "thesis_eval/__init__.py": {"private_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "upstream_sha256": null},
+    "thesis_eval/configs/short_paper_isaacgym.yaml": {"private_sha256": "aa559d8e042b2f14b1f79cdc73e30f7aceb355d9bf827b8038845a3849df2a08", "upstream_sha256": null},
+    "LICENSE": {"private_sha256": "086db6105a0c96864906e47171655e04104f5441e24fb3b9eea6b2fd0516b751", "upstream_sha256": "086db6105a0c96864906e47171655e04104f5441e24fb3b9eea6b2fd0516b751"},
+    "legged_gym/LICENSE": {"private_sha256": "93213abd7c2b1ad2fc70fe08dab8831c7daa0fba5f4d167c6ed4200c7afad67e", "upstream_sha256": null}
+  },
+  "note": "null upstream hash means not verified or absent, not a license assertion; verify file existence independently. Candidate plane closure only; runtime not verified."
+}

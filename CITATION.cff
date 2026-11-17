@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this work, cite the manuscript and the upstream software described in PROVENANCE.md."
+title: "Steady-State Bias Compensation for Learned Bipedal Locomotion: Reference Code"
+type: software
+authors:
+  - family-names: Liu
+    given-names: Jinlong
+preferred-citation:
+  type: unpublished
+  title: "Steady-State Bias Compensation for Learned Bipedal Locomotion: Diagnosis, Frozen-Gain Integral Control, and Hazard-Derived Command Capping"
+  authors:
+    - family-names: Liu
+      given-names: Jinlong

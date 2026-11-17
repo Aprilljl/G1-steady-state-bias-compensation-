@@ -1,0 +1,66 @@
+# Short-paper supplementary experiments, MuJoCo part that needs no new code (stage S1 of 小论文补充实验设计.md).
+# Schema: thesis_eval/scenarios.py, run by ch5_mujoco.py unchanged. Same physics and protocol as chapter5_mujoco.yaml.
+#   SP-A1  failure hazard vs command speed, 120 s episodes   (theory A, predictions PA-1, u_max)
+#   SP-B1  static command-to-speed map g(u; m), 30 s episodes (theory B, kappa_max, prediction PA-4)
+# Run:  python thesis_eval/mujoco_g1_12dof/ch5_mujoco.py --config <this file> --registry eval_results/registry.csv \
+#           --out_root eval_results/short_paper_mujoco --workers $W --only SP-A1 SP-B1
+
+defaults:
+  episodes: 100
+  seed: 0
+  episode_length_s: 20.0
+  warmup_s: 2.0
+  add_noise: false
+  max_envs: 4096
+  timeseries_episodes: 0
+  checkpoint: final
+  condition:
+    payload_kg: 0.0
+    friction: 1.0
+    command_vx: 1.0
+    command_vy: 0.0
+    command_yaw: 0.0
+    push_dir_deg: null
+    push_mag_mps: 0.0
+    push_time_s: null
+  recorder_params: {}
+
+terrains:
+  plane:
+    mesh_type: plane
+    ground_friction: 1.0
+
+experiments:
+
+  SP0_smoke_mujoco:
+    enabled: true
+    policies: [Mar11_13-47-46_]
+    policy_overrides: {activation: elu}
+    terrains: [plane]
+    episodes: 2
+    episode_length_s: 30.0
+    grid:
+      command_vx: [1.0, 2.4]
+
+  # 13 speeds x 100 episodes; long horizon so that low hazards (about 0.005 1/s) give several failures
+  SP-A1_speed_hazard:
+    enabled: true
+    policies: [Mar11_13-47-46_]
+    policy_overrides: {activation: elu}
+    terrains: [plane]
+    episodes: 100
+    episode_length_s: 120.0
+    grid:
+      command_vx: [1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0]
+
+  # 6 payloads x 9 commands x 20 episodes; flat-ground episodes below the boundary are near-deterministic
+  SP-B1_static_map:
+    enabled: true
+    policies: [Mar11_13-47-46_]
+    policy_overrides: {activation: elu}
+    terrains: [plane]
+    episodes: 20
+    episode_length_s: 30.0
+    grid:
+      payload_kg: [0, 3, 5, 8, 10, 15]
+      command_vx: [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25]
