@@ -14,7 +14,7 @@ python -B historical/isaacgym_release/scenarios.py --registry PATH\TO\registry.c
 ## 人工应用到独立沙箱（未执行）
 
 1. 准备用户自己拥有的**全新、独立** `unitree_rl_gym` checkout，不修改现有上游或私有仓。历史记录的上游提交为 `276801e46c5d433564f24658bac64f254b7d2d4b`，推荐使用；若 `git rev-parse HEAD` 为其他提交（例如 `3a4cd236fc5428654c7a7b9442f463d4b9f2d667`），可继续，但须在运行记录中写明实际提交，且步骤 2 的两处上游文件哈希必须匹配。`git status --porcelain` 应为空。
-2. 对照 `overlay_manifest.json` 计算每个 overlay 文件 SHA-256；对两个待替换的上游文件 `legged_gym/envs/base/legged_robot.py` 和 `legged_gym/envs/g1/g1_config.py`，计算原始字节 SHA-256 并严格匹配 manifest 的 `upstream_sha256`，不匹配即停止。对每个新增 `thesis_eval` 和 `eval_batch.py` 路径，必须确认目标不存在；不得覆盖已有用户文件。检查目录不是链接到原 checkout。
+2. 对照 `overlay_manifest.json` 计算每个 overlay 文件 SHA-256；对两个待替换的上游文件 `legged_gym/envs/base/legged_robot.py` 和 `legged_gym/envs/g1/g1_config.py`，计算原始字节 SHA-256 并与 manifest 的 `upstream_sha256` 对照。匹配说明沙箱与历史上游一致；不匹配（例如 `3a4cd236` 上实测为 `9777a260…` 和 `4ecbf0be…`）时可继续，但须在运行记录中写下实际哈希，并先把这两个文件备份为 `*.orig`，再用 overlay 版本整体替换。此时上游在这两个文件上的改动会被覆盖，其余上游文件与私有版本的兼容性需自行确认。对每个新增 `thesis_eval` 和 `eval_batch.py` 路径，必须确认目标不存在；不得覆盖已有用户文件。检查目录不是链接到原 checkout。
 3. 仅在沙箱中按相同相对路径复制 manifest 中的 Python 和 YAML 文件；两个环境文件在步骤 2 严格验证之后才替换。BSD 许可作为来源记录保留在 overlay，勿覆盖沙箱许可。逐个复算目标文件哈希与 `private_sha256` 一致，核对 `git diff`。manifest 的 null 表示未核实或不存在，不能推断允许覆盖。
 4. 在授权、兼容的 Linux Isaac Gym 环境中另行核对 Isaac Gym、PyTorch、`rsl_rl` 1.0.2、NumPy、PyYAML、G1 URDF 和所有 mesh 的来源、版本与许可；确认训练模型可信及 SHA。`torch.load` 可执行代码。运行前检查私有与上游 base config、G1 env、task registry、helpers 和 terrain 差异：这些候选未整体覆盖，可能阻断或改变结果。不可因 smoke 通过即认定等价。
 5. 历史实际入口（**只作待审核说明，本机未运行**）：
