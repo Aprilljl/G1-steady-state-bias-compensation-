@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import g1_runner
 
+DESIGN_DIR = ROOT / "historical" / "eval_results" / "short_paper_design"
+
 
 class MujocoWorkflowTests(unittest.TestCase):
     def test_historical_experiment_mapping_is_explicit(self):
@@ -96,10 +98,12 @@ class MujocoWorkflowTests(unittest.TestCase):
         for name in ("SP-E1_gain_onset:", "SP-E2a_b3_15kg:", "SP-E2b_b5_15kg:",
                      "SP-E2c_b7_15kg:", "SP-E2d_b7_none:"):
             self.assertIn(name, followup)
-        self.assertIn('"15": 0.75', (g1_runner.ROOT / "historical" / "eval_results" /
-                                     "short_paper_design" / "sp_design.json").read_text(encoding="utf-8"))
-        self.assertIn('"15": 2.0', (g1_runner.ROOT / "historical" / "eval_results" /
-                                    "short_paper_design" / "sp_design_v2.json").read_text(encoding="utf-8"))
+
+    @unittest.skipUnless(DESIGN_DIR.joinpath("sp_design.json").is_file() and DESIGN_DIR.joinpath("sp_design_v2.json").is_file(),
+                         "frozen design files are not published (historical/eval_results/ is gitignored)")
+    def test_frozen_design_files_carry_registered_caps(self):
+        self.assertIn('"15": 0.75', (DESIGN_DIR / "sp_design.json").read_text(encoding="utf-8"))
+        self.assertIn('"15": 2.0', (DESIGN_DIR / "sp_design_v2.json").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
